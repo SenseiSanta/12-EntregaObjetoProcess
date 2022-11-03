@@ -1,6 +1,10 @@
 /* ============= INICIO DE ROUTEO ============= */
 import express from 'express';
 const routerInitial = express.Router();
+import { fork } from 'child_process';
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /* ============ Creacion de objeto ============ */
 import { ContenedorSQLite } from '../container/ContenedorSQLite.js';
@@ -31,6 +35,7 @@ async function verifyPassword(user, pass) {
 /* =============== Passport =============== */
 import passport from 'passport';
 import { Strategy } from 'passport-local'
+import path from 'path';
 const LocalStrategy = Strategy;
 
 passport.use(new LocalStrategy(
@@ -139,6 +144,17 @@ routerInitial.get('/info', async (req, res) => {
     const processMemory = process.memoryUsage().rss
     const processDirectory = process.cwd()
     res.status(200).render('info', {process, processArgs, processMemory, processDirectory})
+})
+
+routerInitial.get('/api/randoms', async (req, res) => {
+    const { cantidad } = req.query
+
+    const forkProcess = fork(`${__dirname}/apiRandomNumber.js`)
+    forkProcess.send('mensaje del principal')
+    forkProcess.on('message', msg =>{
+        console.log(msg)
+    })
+    res.status(200).render('apiRandoms')
 })
 
 /* =========== Exportacion de modulo =========== */
