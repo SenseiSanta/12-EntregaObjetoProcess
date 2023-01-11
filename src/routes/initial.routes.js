@@ -16,6 +16,9 @@ const cajaMensajes = new ContenedorFirebase('mensajes');
 const cajaProducto = new ContenedorSQLite('productos');
 const cajaUsuario = new ContenedorMongoDB('usuarios', UsuariosSchema)
 
+/* ============= Creacion de fork ============ */
+const forkProcess = fork('./src/utils/apiRandomNumber.js')
+
 /* ================== Mocks ================== */
 import { productoMock } from '../mocks/producto.mock.js';
 
@@ -149,11 +152,10 @@ routerInitial.get('/info', async (req, res) => {
 routerInitial.get('/api/randoms', async (req, res) => {
     const { cantidad } = req.query
 
-    const forkProcess = fork(`${__dirname}/apiRandomNumber.js`)
-    forkProcess.send('mensaje del principal')
-    forkProcess.on('message', msg =>{
+    forkProcess.send(cantidad)
+/*     forkProcess.on("message", msg =>{
         console.log(msg)
-    })
+    }) */
     res.status(200).render('apiRandoms')
 })
 

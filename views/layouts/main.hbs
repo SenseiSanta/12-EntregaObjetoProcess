@@ -107,7 +107,17 @@
                 img: inputImg.value
             }
             socket.emit('from-client-product', producto);
-        }    
+        }
+
+        async function renderRandomNumbers(numbers) {
+            console.log(numbers)
+            document.querySelector('#randomNumbers').innerHTML = numbers; 
+        }
+
+        socket.on('hardMath', numbers =>{ /*============ Respuesta al cargar pagina de apiRandomNumber.js ============*/
+            console.log('HOLA')
+            renderRandomNumbers(numbers)
+        })    
  
     </script>
 </body>

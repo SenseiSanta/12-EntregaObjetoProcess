@@ -8,6 +8,8 @@ const __dirname = path.dirname(__filename);
 import morgan from "morgan";
 import minimist from "minimist";
 import util from "util";
+import cluster from "cluster";
+import os from 'os';
 import { ContenedorSQLite } from "./src/container/ContenedorSQLite.js";
 import { ContenedorFirebase } from "./src/container/ContenedorFirebase.js";
 import { Server as HttpServer } from "http";
@@ -71,6 +73,7 @@ app.use("/api/productos-test", routerProductosTest);
 app.use("*", (req, res) => {
   res.send({ error: "Probablemente la ruta a la que intentas acceder no exista" });
 });
+
 
 /*================== Servidor ==================*/
 const minimistOptions = {default: {p: 8080}}
